@@ -56,11 +56,11 @@ import createReduxPromiseListener from 'redux-promise-listener'
 
 const reduxPromiseListener = createReduxPromiseListener
 const store = createStore(
-    reducer,
-    initialState,
-    applyMiddleware(...otherMiddleware, reduxPromiseListener.middleware)
+  reducer,
+  initialState,
+  applyMiddleware(...otherMiddleware, reduxPromiseListener.middleware)
 )
-export const promiseListener = reduxPromiseListener <---- ⚠️ IMPORTANT ⚠️
+export const promiseListener = reduxPromiseListener // <---- ⚠️ IMPORTANT ⚠️
 
 export default store
 ```
