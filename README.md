@@ -67,7 +67,7 @@ export default store
 
 ### Step 2
 
-If you are using `react-redux`, [your Step 2 is over here](https://github.com/erikras/react-redux-promise-listener).
+If you are using `react-redux`, [your Step 2 is over here](https://github.com/erikras/react-redux-promise-listener#step-2).
 
 ...
 
