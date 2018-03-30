@@ -15,31 +15,29 @@ Libraries like [`redux-promise`](https://github.com/redux-utilities/redux-promis
 Most of the popular form libraries accept an `onSubmit` function that is expected to return a `Promise` that resolves when the submission is complete, or rejects when the submission fails. This mechanism is fundamentally incompatible with action management libraries like [`redux-saga`](https://redux-saga.js.org), which perform side-effects (e.g. ajax requests) in a way that does not let the submission function easily return a promise. Redux Promise Listener is a potential solution.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-* [Usage](#usage)
-  * [Step 1](#step-1)
-  * [Step 2](#step-2)
-* [API](#api)
-  * [`createListener: () => PromiseListener`](#createlistener---promiselistener)
-  * [`middleware.generateAsyncFunction: (config: Config) => AsyncFunction`](#middlewaregenerateasyncfunction-config-config--asyncfunction)
-* [Types](#types)
-  * [`PromiseListener`](#promiselistener)
-    * [`middleware: Middleware`](#middleware-middleware)
-    * [`createAsyncFunction: (config: Config) => AsyncFunction`](#createasyncfunction-config-config--asyncfunction)
-  * [`Config`](#config)
-    * [`start: string`](#start-string)
-    * [`resolve: string`](#resolve-string)
-    * [`reject: string`](#reject-string)
-    * [`setPayload?: (action: Object, payload: any) => Object`](#setpayload-action-object-payload-any--object)
-    * [`getPayload?: (action: Object) => any`](#getpayload-action-object--any)
-    * [`getError?: (action: Object) => any`](#geterror-action-object--any)
-  * [`AsyncFunction`](#asyncfunction)
-    * [`fn: (payload: any) => Promise<any>`](#fn-payload-any--promiseany)
-    * [`unsubscribe: () => void`](#unsubscribe---void)
+- [Usage](#usage)
+  - [Step 1](#step-1)
+  - [Step 2](#step-2)
+- [API](#api)
+  - [`createListener: () => PromiseListener`](#createlistener---promiselistener)
+  - [`middleware.generateAsyncFunction: (config: Config) => AsyncFunction`](#middlewaregenerateasyncfunction-config-config--asyncfunction)
+- [Types](#types)
+  - [`PromiseListener`](#promiselistener)
+    - [`middleware: Middleware`](#middleware-middleware)
+    - [`createAsyncFunction: (config: Config) => AsyncFunction`](#createasyncfunction-config-config--asyncfunction)
+  - [`Config`](#config)
+    - [`start: string`](#start-string)
+    - [`resolve: string`](#resolve-string)
+    - [`reject: string`](#reject-string)
+    - [`setPayload?: (action: Object, payload: any) => Object`](#setpayload-action-object-payload-any--object)
+    - [`getPayload?: (action: Object) => any`](#getpayload-action-object--any)
+    - [`getError?: (action: Object) => any`](#geterror-action-object--any)
+  - [`AsyncFunction`](#asyncfunction)
+    - [`asyncFunction: (payload: any) => Promise<any>`](#asyncfunction-payload-any--promiseany)
+    - [`unsubscribe: () => void`](#unsubscribe---void)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -87,12 +85,12 @@ const generatedAsyncFunction = promiseListener.generateAsyncFunction(
 
 // This structure is in the shape:
 // {
-//   fn,         <--- the async function that dispatches the start action and returns a Promise
-//   unsubscribe <--- a function to unsubscribe from the Redux store
+//   asyncFunction, <--- the async function that dispatches the start action and returns a Promise
+//   unsubscribe    <--- a function to unsubscribe from the Redux store
 // }
 
 // dispatches an action { type: 'START_ACTION_TYPE', payload: values }
-generatedAsyncFunction.fn(values).then(
+generatedAsyncFunction.asyncFunction(values).then(
   // called with action.payload when an action of
   // type 'RESOLVE_ACTION_TYPE' is dispatched
   resolvePayload => {
@@ -164,7 +162,7 @@ A function to get the error out of the reject action to pass to reject the promi
 
 An object with the following values:
 
-#### `fn: (payload: any) => Promise<any>`
+#### `asyncFunction: (payload: any) => Promise<any>`
 
 The async function that will dispatch the start action and return a promise that will resolve when the resolve action is dispatched or reject when the reject action is dispatched.
 
