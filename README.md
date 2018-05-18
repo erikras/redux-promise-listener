@@ -52,7 +52,7 @@ Create and add the middleware as you would with any Redux middleware. Remember t
 import { createStore, applyMiddleware } from 'redux'
 import createReduxPromiseListener from 'redux-promise-listener'
 
-const reduxPromiseListener = createReduxPromiseListener
+const reduxPromiseListener = createReduxPromiseListener()
 const store = createStore(
   reducer,
   initialState,
