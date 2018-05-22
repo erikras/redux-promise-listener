@@ -7,9 +7,10 @@ export type Next = Action => State
 export type SetPayload = (Action, any) => Action
 export type GetPayload = Action => ?any
 export type Middleware = Store => Next => Action => State
+export type ActionMatcher = Action => boolean
 export type Config = {
-  start: string,
-  resolve: string,
+  start: string | ActionMatcher,
+  resolve: string | ActionMatcher,
   reject: string,
   setPayload?: SetPayload,
   getPayload?: GetPayload,

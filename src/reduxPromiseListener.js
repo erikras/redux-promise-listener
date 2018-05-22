@@ -52,10 +52,10 @@ export default function createListener(): PromiseListener {
           )
         )
         const listener: Listener = action => {
-          if (action.type === config.resolve) {
+          if (action.type === config.resolve || typeof config.resolve === 'function' && config.resolve(action)) {
             unsubscribe()
             resolve((config.getPayload || defaultGetPayload)(action))
-          } else if (action.type === config.reject) {
+          } else if (action.type === config.reject || typeof config.reject === 'function' && config.reject(action)) {
             unsubscribe()
             reject((config.getError || defaultGetError)(action))
           }
