@@ -1,12 +1,11 @@
 // @flow
-import type { Store } from 'redux'
+import type { Store, Middleware } from 'redux'
 
 export type State = any
 export type Action = { type: string, payload?: any }
 export type Next = Action => State
 export type SetPayload = (Action, any) => Action
 export type GetPayload = Action => ?any
-export type Middleware = Store => Next => Action => State
 export type Config = {
   start: string,
   resolve: string,
@@ -20,8 +19,8 @@ export type AsyncFunction = {
   unsubscribe: () => void
 }
 export type PromiseListener = {
-  middleware: Middleware,
+  middleware: Middleware<State, Action>,
   createAsyncFunction: Config => AsyncFunction
 }
 
-declare export function createListener(): PromiseListener
+declare export default function createListener(): PromiseListener
