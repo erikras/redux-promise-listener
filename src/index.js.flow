@@ -6,7 +6,6 @@ export type Action = { type: string, payload?: any }
 export type Next = Action => State
 export type SetPayload = (Action, any) => Action
 export type GetPayload = Action => ?any
-export type Middleware = Store => Next => Action => State
 export type ActionMatcher = Action => boolean
 export type Config = {
   start: string,
