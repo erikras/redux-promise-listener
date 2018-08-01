@@ -17,7 +17,6 @@ describe('redux-promise-listener', () => {
       expect(reducer).toHaveBeenCalled()
       expect(reducer).toHaveBeenCalledTimes(1)
       expect(reducer.mock.calls[0][0]).toBe(initialState)
-      expect(reducer.mock.calls[0][1]).toEqual({ type: '@@redux/INIT' })
 
       store.dispatch({ type: 'TEST' })
       expect(reducer).toHaveBeenCalledTimes(2)
@@ -48,7 +47,6 @@ describe('redux-promise-listener', () => {
         applyMiddleware(middleware)
       )
       expect(reducer).toHaveBeenCalledTimes(1)
-      expect(reducer.mock.calls[0][1]).toEqual({ type: '@@redux/INIT' })
 
       const { asyncFunction } = createAsyncFunction({
         start: 'START',
@@ -102,7 +100,6 @@ describe('redux-promise-listener', () => {
         applyMiddleware(middleware)
       )
       expect(reducer).toHaveBeenCalledTimes(1)
-      expect(reducer.mock.calls[0][1]).toEqual({ type: '@@redux/INIT' })
 
       const { asyncFunction } = createAsyncFunction({
         start: 'START',
@@ -156,7 +153,6 @@ describe('redux-promise-listener', () => {
         applyMiddleware(middleware)
       )
       expect(reducer).toHaveBeenCalledTimes(1)
-      expect(reducer.mock.calls[0][1]).toEqual({ type: '@@redux/INIT' })
 
       const { asyncFunction } = createAsyncFunction({
         start: 'START',
@@ -210,7 +206,6 @@ describe('redux-promise-listener', () => {
         applyMiddleware(middleware)
       )
       expect(reducer).toHaveBeenCalledTimes(1)
-      expect(reducer.mock.calls[0][1]).toEqual({ type: '@@redux/INIT' })
 
       const { asyncFunction } = createAsyncFunction({
         start: 'START',
@@ -264,7 +259,6 @@ describe('redux-promise-listener', () => {
         applyMiddleware(middleware)
       )
       expect(reducer).toHaveBeenCalledTimes(1)
-      expect(reducer.mock.calls[0][1]).toEqual({ type: '@@redux/INIT' })
 
       const { asyncFunction } = createAsyncFunction({
         start: 'START',
@@ -326,7 +320,6 @@ describe('redux-promise-listener', () => {
         applyMiddleware(middleware)
       )
       expect(reducer).toHaveBeenCalledTimes(1)
-      expect(reducer.mock.calls[0][1]).toEqual({ type: '@@redux/INIT' })
 
       const { asyncFunction } = createAsyncFunction({
         start: 'START',
@@ -500,7 +493,6 @@ describe('redux-promise-listener', () => {
         applyMiddleware(middleware)
       )
       expect(reducer).toHaveBeenCalledTimes(1)
-      expect(reducer.mock.calls[0][1]).toEqual({ type: '@@redux/INIT' })
 
       const { unsubscribe } = createAsyncFunction({
         start: 'START',
