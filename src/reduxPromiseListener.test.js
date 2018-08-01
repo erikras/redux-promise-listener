@@ -92,6 +92,60 @@ describe('redux-promise-listener', () => {
       expect(reject).not.toHaveBeenCalled()
     })
 
+    it('should dispatch start action and resolve on resolve action when passed a matcher function', async () => {
+      const reducer = jest.fn((state, action) => state)
+      const initialState = {}
+      const { middleware, createAsyncFunction } = createListener()
+      const store = createStore(
+        reducer,
+        initialState,
+        applyMiddleware(middleware)
+      )
+      expect(reducer).toHaveBeenCalledTimes(1)
+      expect(reducer.mock.calls[0][1]).toEqual({ type: '@@redux/INIT' })
+
+      const { asyncFunction } = createAsyncFunction({
+        start: 'START',
+        resolve: action => action.type === 'RESOLVE',
+        reject: action => action.type === 'REJECT'
+      })
+
+      // nothing dispatched yet
+      expect(reducer).toHaveBeenCalledTimes(1)
+
+      const resolve = jest.fn()
+      const reject = jest.fn()
+      asyncFunction('foo').then(resolve, reject)
+      expect(resolve).not.toHaveBeenCalled()
+      expect(reject).not.toHaveBeenCalled()
+
+      // start action dispatched
+      expect(reducer).toHaveBeenCalledTimes(2)
+      expect(reducer.mock.calls[1][1]).toEqual({
+        type: 'START',
+        payload: 'foo'
+      })
+
+      await sleep(1)
+      expect(resolve).not.toHaveBeenCalled()
+      expect(reject).not.toHaveBeenCalled()
+
+      store.dispatch({ type: 'SOME_OTHER_ACTION', payload: 'whatever' })
+      expect(resolve).not.toHaveBeenCalled()
+      expect(reject).not.toHaveBeenCalled()
+
+      await sleep(1)
+
+      store.dispatch({ type: 'RESOLVE', payload: 'bar' })
+
+      await sleep(1)
+
+      expect(resolve).toHaveBeenCalled()
+      expect(resolve).toHaveBeenCalledTimes(1)
+      expect(resolve.mock.calls[0][0]).toBe('bar')
+      expect(reject).not.toHaveBeenCalled()
+    })
+
     it('should dispatch start action and reject on reject action', async () => {
       const reducer = jest.fn((state, action) => state)
       const initialState = {}
@@ -108,6 +162,60 @@ describe('redux-promise-listener', () => {
         start: 'START',
         resolve: 'RESOLVE',
         reject: 'REJECT'
+      })
+
+      // nothing dispatched yet
+      expect(reducer).toHaveBeenCalledTimes(1)
+
+      const resolve = jest.fn()
+      const reject = jest.fn()
+      asyncFunction('foo').then(resolve, reject)
+      expect(resolve).not.toHaveBeenCalled()
+      expect(reject).not.toHaveBeenCalled()
+
+      // start action dispatched
+      expect(reducer).toHaveBeenCalledTimes(2)
+      expect(reducer.mock.calls[1][1]).toEqual({
+        type: 'START',
+        payload: 'foo'
+      })
+
+      await sleep(1)
+      expect(resolve).not.toHaveBeenCalled()
+      expect(reject).not.toHaveBeenCalled()
+
+      store.dispatch({ type: 'SOME_OTHER_ACTION', payload: 'whatever' })
+      expect(resolve).not.toHaveBeenCalled()
+      expect(reject).not.toHaveBeenCalled()
+
+      await sleep(1)
+
+      store.dispatch({ type: 'REJECT', payload: 'bar' })
+
+      await sleep(1)
+
+      expect(resolve).not.toHaveBeenCalled()
+      expect(reject).toHaveBeenCalled()
+      expect(reject).toHaveBeenCalledTimes(1)
+      expect(reject.mock.calls[0][0]).toBe('bar')
+    })
+
+    it('should dispatch start action and reject on reject action when passed a matcher function', async () => {
+      const reducer = jest.fn((state, action) => state)
+      const initialState = {}
+      const { middleware, createAsyncFunction } = createListener()
+      const store = createStore(
+        reducer,
+        initialState,
+        applyMiddleware(middleware)
+      )
+      expect(reducer).toHaveBeenCalledTimes(1)
+      expect(reducer.mock.calls[0][1]).toEqual({ type: '@@redux/INIT' })
+
+      const { asyncFunction } = createAsyncFunction({
+        start: 'START',
+        resolve: action => action.type === 'RESOLVE',
+        reject: action => action.type === 'REJECT'
       })
 
       // nothing dispatched yet
