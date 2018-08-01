@@ -1,6 +1,6 @@
 {
   "name": "redux-promise-listener",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A Redux middleware that allows actions to be converted into Promises",
   "main": "dist/redux-promise-listener.cjs.js",
   "jsnext:main": "dist/redux-promise-listener.es.js",
