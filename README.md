@@ -25,13 +25,14 @@ Most of the popular form libraries accept an `onSubmit` function that is expecte
   - [`createListener: () => PromiseListener`](#createlistener---promiselistener)
   - [`middleware.generateAsyncFunction: (config: Config) => AsyncFunction`](#middlewaregenerateasyncfunction-config-config--asyncfunction)
 - [Types](#types)
+  - [`ActionMatcher: Action => boolean`](#actionmatcher-action--boolean)
   - [`PromiseListener`](#promiselistener)
     - [`middleware: Middleware`](#middleware-middleware)
     - [`createAsyncFunction: (config: Config) => AsyncFunction`](#createasyncfunction-config-config--asyncfunction)
   - [`Config`](#config)
     - [`start: string`](#start-string)
-    - [`resolve: string`](#resolve-string)
-    - [`reject: string`](#reject-string)
+    - [`resolve: string | ActionMatcher`](#resolve-string--actionmatcher)
+    - [`reject: string | ActionMatcher`](#reject-string--actionmatcher)
     - [`setPayload?: (action: Object, payload: any) => Object`](#setpayload-action-object-payload-any--object)
     - [`getPayload?: (action: Object) => any`](#getpayload-action-object--any)
     - [`getError?: (action: Object) => any`](#geterror-action-object--any)
@@ -118,6 +119,10 @@ The default export of this library. Creates a Redux middleware, but that also ha
 
 ## Types
 
+### `ActionMatcher: Action => boolean`
+
+A predicate with which to make decisions about Redux actions.
+
 ### `PromiseListener`
 
 An object with the following values:
@@ -138,13 +143,13 @@ An object with the following values:
 
 The `type` of action to dispatch when the function is called.
 
-#### `resolve: string`
+#### `resolve: string | ActionMatcher`
 
-The `type` of action that will cause the promise to be resolved.
+The `type` of action that will cause the promise to be resolved, or a predicate function that will return `true` when given the type of action to resolve for.
 
-#### `reject: string`
+#### `reject: string | ActionMatcher`
 
-The `type` of action that will cause the promise to be rejected.
+The `type` of action that will cause the promise to be rejected, or a predicate function that will return `true` when given the type of action to reject for.
 
 #### `setPayload?: (action: Object, payload: any) => Object`
 
