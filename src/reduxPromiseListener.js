@@ -45,12 +45,6 @@ export default function createListener(): PromiseListener {
     }
     const asyncFunction = (payload: any) =>
       new Promise((resolve, reject) => {
-        dispatch(
-          (config.setPayload || defaultSetPayload)(
-            { type: config.start },
-            payload
-          )
-        )
         const listener: Listener = action => {
           if (
             action.type === config.resolve ||
@@ -67,6 +61,12 @@ export default function createListener(): PromiseListener {
           }
         }
         listeners[listenerId] = listener
+        dispatch(
+          (config.setPayload || defaultSetPayload)(
+            { type: config.start },
+            payload
+          )
+        )
       })
 
     return { asyncFunction, unsubscribe }
