@@ -1,6 +1,6 @@
 {
-  "name": "redux-promise-listener",
-  "version": "1.1.0",
+  "name": "@colony/redux-promise-listener",
+  "version": "1.2.0",
   "description": "A Redux middleware that allows actions to be converted into Promises",
   "main": "dist/redux-promise-listener.cjs.js",
   "jsnext:main": "dist/redux-promise-listener.es.js",
@@ -13,16 +13,19 @@
     "test": "nps test",
     "precommit": "lint-staged && npm start validate"
   },
-  "author": "Erik Rasmussen <rasmussenerik@gmail.com> (http://github.com/erikras)",
+  "contributors": [
+    "Erik Rasmussen <rasmussenerik@gmail.com> (http://github.com/erikras)",
+    "Christian Maniewski <chris@colony.io>"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/erikras/redux-promise-listener.git"
+    "url": "https://github.com/joincolony/redux-promise-listener.git"
   },
   "bugs": {
-    "url": "https://github.com/erikras/redux-promise-listener/issues"
+    "url": "https://github.com/joincolony/redux-promise-listener/issues"
   },
-  "homepage": "https://github.com/erikras/redux-promise-listener#readme",
+  "homepage": "https://github.com/joincolony/redux-promise-listener#readme",
   "devDependencies": {
     "babel-eslint": "^8.2.6",
     "babel-jest": "^23.4.2",
