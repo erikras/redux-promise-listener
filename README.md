@@ -21,6 +21,7 @@ Most of the popular form libraries accept an `onSubmit` function that is expecte
 - [Usage](#usage)
   - [Step 1](#step-1)
   - [Step 2](#step-2)
+- [Avoiding conflicts](#avoiding-conflicts)
 - [API](#api)
   - [`createListener: () => PromiseListener`](#createlistener---promiselistener)
   - [`middleware.generateAsyncFunction: (config: Config) => AsyncFunction`](#middlewaregenerateasyncfunction-config-config--asyncfunction)
@@ -107,6 +108,37 @@ generatedAsyncFunction.asyncFunction(values).then(
 
 // when done, to prevent memory leaks
 generatedAsyncFunction.unsubscribe()
+```
+
+## Avoiding conflicts
+
+By default the listener will succeed when the first action matching the defined matcher is dispatched. Most of the times this is not the desired behavior (as multiple actions can be fired at the same time). To avoid this, the dispatched action gets an id property in its meta field. If this id is present in the `resolve`, `reject` actions it will only react to these which id matches to the one generated in the beginning. It is on you to pass through the id in your sagas. The easiest way is to pass through the whole `meta` object:
+
+```javascript
+function* saga() {
+  while(true) {
+    const { payload, meta } = yield take('RESOURCE_REQUEST')
+                     ^
+    try {
+      const detail = yield call(callApi, payload) // payload == { id: 'foo' }
+      yield put({
+        type: 'RESOURCE_SUCCESS',
+        payload: detail,
+        meta
+        ^
+      })
+    } catch (e) {
+      yield put({
+        type: 'RESOURCE_FAILURE',
+        payload: e,
+        error: true,
+        ^
+        meta
+        ^
+      })
+    }
+  }
+}
 ```
 
 ## API
