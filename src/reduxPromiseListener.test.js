@@ -67,7 +67,8 @@ describe('redux-promise-listener', () => {
       expect(reducer).toHaveBeenCalledTimes(2)
       expect(reducer.mock.calls[1][1]).toEqual({
         type: 'START',
-        payload: 'foo'
+        payload: 'foo',
+        meta: { id: expect.any(String) }
       })
 
       await sleep(1)
@@ -120,7 +121,8 @@ describe('redux-promise-listener', () => {
       expect(reducer).toHaveBeenCalledTimes(2)
       expect(reducer.mock.calls[1][1]).toEqual({
         type: 'START',
-        payload: 'foo'
+        payload: 'foo',
+        meta: { id: expect.any(String) }
       })
 
       await sleep(1)
@@ -173,7 +175,8 @@ describe('redux-promise-listener', () => {
       expect(reducer).toHaveBeenCalledTimes(2)
       expect(reducer.mock.calls[1][1]).toEqual({
         type: 'START',
-        payload: 'foo'
+        payload: 'foo',
+        meta: { id: expect.any(String) }
       })
 
       await sleep(1)
@@ -226,7 +229,8 @@ describe('redux-promise-listener', () => {
       expect(reducer).toHaveBeenCalledTimes(2)
       expect(reducer.mock.calls[1][1]).toEqual({
         type: 'START',
-        payload: 'foo'
+        payload: 'foo',
+        meta: { id: expect.any(String) }
       })
 
       await sleep(1)
@@ -247,6 +251,63 @@ describe('redux-promise-listener', () => {
       expect(reject).toHaveBeenCalled()
       expect(reject).toHaveBeenCalledTimes(1)
       expect(reject.mock.calls[0][0]).toBe('bar')
+    })
+
+    it('should not react to an action with a wrong id', async () => {
+      const reducer = jest.fn((state, action) => state)
+      const initialState = {}
+      const { middleware, createAsyncFunction } = createListener()
+      const store = createStore(
+        reducer,
+        initialState,
+        applyMiddleware(middleware)
+      )
+      expect(reducer).toHaveBeenCalledTimes(1)
+
+      const { asyncFunction } = createAsyncFunction({
+        start: 'START',
+        resolve: action => action.type === 'RESOLVE',
+        reject: action => action.type === 'REJECT'
+      })
+
+      // nothing dispatched yet
+      expect(reducer).toHaveBeenCalledTimes(1)
+
+      const resolve = jest.fn()
+      const reject = jest.fn()
+      asyncFunction('foo').then(resolve, reject)
+      expect(resolve).not.toHaveBeenCalled()
+      expect(reject).not.toHaveBeenCalled()
+
+      // start action dispatched
+      expect(reducer).toHaveBeenCalledTimes(2)
+      expect(reducer.mock.calls[1][1]).toEqual({
+        type: 'START',
+        payload: 'foo',
+        meta: { id: expect.any(String) }
+      })
+
+      expect(resolve).not.toHaveBeenCalled()
+      expect(reject).not.toHaveBeenCalled()
+
+      store.dispatch({
+        type: 'RESOLVE',
+        payload: 'whatever',
+        meta: { id: 'wrongid' }
+      })
+
+      await sleep(1)
+
+      expect(resolve).not.toHaveBeenCalled()
+      expect(reject).not.toHaveBeenCalled()
+
+      const { id } = reducer.mock.calls[1][1].meta
+      store.dispatch({ type: 'RESOLVE', payload: 'whatever', meta: { id } })
+
+      await sleep(1)
+
+      expect(resolve).toHaveBeenCalled()
+      expect(reject).not.toHaveBeenCalled()
     })
 
     it('should not call resolve twice', async () => {
@@ -279,7 +340,8 @@ describe('redux-promise-listener', () => {
       expect(reducer).toHaveBeenCalledTimes(2)
       expect(reducer.mock.calls[1][1]).toEqual({
         type: 'START',
-        payload: 'foo'
+        payload: 'foo',
+        meta: { id: expect.any(String) }
       })
 
       await sleep(1)
@@ -340,7 +402,8 @@ describe('redux-promise-listener', () => {
       expect(reducer).toHaveBeenCalledTimes(2)
       expect(reducer.mock.calls[1][1]).toEqual({
         type: 'START',
-        payload: 'foo'
+        payload: 'foo',
+        meta: { id: expect.any(String) }
       })
 
       await sleep(1)
@@ -403,7 +466,8 @@ describe('redux-promise-listener', () => {
       expect(reducer).toHaveBeenCalledTimes(2)
       expect(reducer.mock.calls[1][1]).toEqual({
         type: 'START',
-        data: 'foo'
+        data: 'foo',
+        meta: { id: expect.any(String) }
       })
 
       await sleep(1)
@@ -458,7 +522,8 @@ describe('redux-promise-listener', () => {
       expect(reducer).toHaveBeenCalledTimes(2)
       expect(reducer.mock.calls[1][1]).toEqual({
         type: 'START',
-        data: 'foo'
+        data: 'foo',
+        meta: { id: expect.any(String) }
       })
 
       await sleep(1)

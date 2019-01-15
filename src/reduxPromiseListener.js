@@ -45,13 +45,18 @@ export default function createListener(): PromiseListener {
     }
     const asyncFunction = (payload: any) =>
       new Promise((resolve, reject) => {
+        const id = Math.random()
+          .toString(36)
+          .substr(2)
         dispatch(
           (config.setPayload || defaultSetPayload)(
-            { type: config.start },
+            { type: config.start, meta: { id } },
             payload
           )
         )
         const listener: Listener = action => {
+          // If action has an id, check whether it's correct
+          if (action.meta && action.meta.id && action.meta.id !== id) return
           if (
             action.type === config.resolve ||
             (typeof config.resolve === 'function' && config.resolve(action))

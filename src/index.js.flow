@@ -2,7 +2,7 @@
 import type { Store, Middleware } from 'redux'
 
 export type State = any
-export type Action = { type: string, payload?: any }
+export type Action = { type: string, payload?: any, meta?: any }
 export type Next = Action => State
 export type SetPayload = (Action, any) => Action
 export type GetPayload = Action => ?any
