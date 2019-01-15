@@ -48,12 +48,6 @@ export default function createListener(): PromiseListener {
         const id = Math.random()
           .toString(36)
           .substr(2)
-        dispatch(
-          (config.setPayload || defaultSetPayload)(
-            { type: config.start, meta: { id } },
-            payload
-          )
-        )
         const listener: Listener = action => {
           // If action has an id, check whether it's correct
           if (action.meta && action.meta.id && action.meta.id !== id) return
@@ -72,6 +66,12 @@ export default function createListener(): PromiseListener {
           }
         }
         listeners[listenerId] = listener
+        dispatch(
+          (config.setPayload || defaultSetPayload)(
+            { type: config.start, meta: { id } },
+            payload
+          )
+        )
       })
 
     return { asyncFunction, unsubscribe }
