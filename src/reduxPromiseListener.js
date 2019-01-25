@@ -66,12 +66,16 @@ export default function createListener(): PromiseListener {
           }
         }
         listeners[listenerId] = listener
-        dispatch(
-          (config.setPayload || defaultSetPayload)(
+        let action
+        if (typeof config.start === 'function') {
+          action = config.start({ payload, meta: { id } })
+        } else {
+          action = (config.setPayload || defaultSetPayload)(
             { type: config.start, meta: { id } },
             payload
           )
-        )
+        }
+        dispatch(action)
       })
 
     return { asyncFunction, unsubscribe }
